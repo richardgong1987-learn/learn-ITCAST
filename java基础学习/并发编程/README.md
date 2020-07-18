@@ -52,7 +52,23 @@ sleep与yield的区别:
 
 ### 3.8 join 方法详解
 
-#### 为什么需要 join
+join底层是用wait实现的,通过不断的判断isAlive来判断是否线程还在,如果还在就wait,这就是join的实现原理
+
+一句话说就是:wait和join本质都是wait
+
+
+
+### 3.9 interrupt 方法详解
+
+#### 打断 sleep，wait，join 的线程
+
+这几个方法都会让线程进入阻塞状态
+
+打断 sleep 的线程, 会清空打断状态，以 sleep 为例
+
+
+
+#### 打断 park 线程
 
 
 
