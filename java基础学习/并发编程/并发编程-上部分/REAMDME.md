@@ -217,3 +217,140 @@ lock.wait();
 
 
 ## 5. 共享模型之内存
+
+### 5.1 Java 内存模型
+
+MM 即 Java Memory Model，它定义了主存、工作内存抽象概念，底层对应着 CPU 寄存器、缓存、硬件内存、
+CPU 指令优化等
+
+JMM 体现在以下几个方面
+
+- 原子性 - 保证指令不会受到线程上下文切换的影响
+- 可见性 - 保证指令不会受 cpu 缓存的影响
+- 有序性 - 保证指令不会受 cpu 指令并行优化的影响
+
+
+
+## 6. 共享模型之无锁
+
+### 6.2 CAS 与 volatile
+
+
+
+## 7. 共享模型之不可变
+
+### 思路 - 不可变
+
+如果一个对象在不能够修改其内部状态（属性），那么它就是线程安全的，因为不存在并发修改啊！这样的对象在
+Java 中有很多，例如在 Java 8 后，提供了一个新的日期格式化类：
+
+
+
+### 思路 - 无状态
+
+在 web 阶段学习时，设计 Servlet 时为了保证其线程安全，都会有这样的建议，不要为 Servlet 设置成员变量，这
+种没有任何成员变量的类是线程安全的
+
+
+
+
+
+## 8. 共享模型之工具
+
+### 8.1 线程池
+
+#### 1. 自定义线程池!
+
+#### 2. ThreadPoolExecutor
+
+##### JDK Executors类中提供了众多工厂方法来创建各种用途的线程池
+
+##### 3) newFixedThreadPool
+
+##### 4) newCachedThreadPool
+
+##### 5) newSingleThreadExecutor
+
+
+
+### 3. Fork/Join
+
+#### 1) 概念
+
+Fork/Join 是 JDK 1.7 加入的新的线程池实现，它体现的是一种分治思想，适用于能够进行任务拆分的 cpu 密集型
+运算
+
+
+
+#### 2) 使用
+
+提交给 Fork/Join 线程池的任务需要继承 RecursiveTask（有返回值）或 RecursiveAction（没有返回值）
+
+
+
+### 8.2  J.U.C
+
+#### 1. * AQS 原理
+
+#### 2. * ReentrantLock 原理
+
+#### 3. 读写锁
+
+##### 3.1 ReentrantReadWriteLock
+
+当读操作远远高于写操作时，这时候使用  读写锁 让  读-读 可以并发，提高性能。 类似于数据库中的  select ...
+from ... lock in share mode
+提供一个  数据容器类 内部分别使用读锁保护数据的  read() 方法，写锁保护数据的  write() 方法
+
+
+
+##### 3.2 StampedLock
+
+该类自 JDK 8 加入，是为了进一步优化读性能，它的特点是在使用读锁、写锁时都必须配合【戳】使用
+
+
+
+#### 4. Semaphore
+
+本使用信号量，用来限制能同时访问共享资源的线程上限。
+
+##### * Semaphore 原理
+
+
+
+#### 5. CountdownLatch
+
+用来进行线程同步协作，等待所有线程完成倒计时。
+其中构造参数用来初始化等待计数值，await() 用来等待计数归零，countDown() 用来让计数减一
+
+
+
+#### 6. CyclicBarrier
+
+]循环栅栏，用来进行线程协作，等待线程满足某个计数。构造时设置『计数个数』，每个线程执
+行到某个需要“同步”的时刻调用 await() 方法进行等待，当等待的线程数满足『计数个数』时，继续执行
+
+
+
+#### 8. ConcurrentHashMap
+
+##### ConcurrentHashMap 原理
+
+
+
+#### 9. BlockingQueue
+
+##### * BlockingQueue 原理
+
+
+
+#### 10. ConcurrentLinkedQueue
+
+ConcurrentLinkedQueue 的设计与 LinkedBlockingQueue 非常像
+
+
+
+#### 11. CopyOnWriteArrayList
+
+opyOnWriteArraySet 是它的马甲 底层实现采用了  写入时拷贝 的思想，增删改操作会将底层数组拷贝一份，更
+改操作在新数组上执行，这时不影响其它线程的并发读，读写分离。
